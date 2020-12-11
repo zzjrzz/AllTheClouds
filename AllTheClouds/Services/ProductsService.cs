@@ -14,7 +14,7 @@ namespace AllTheClouds.Services
         private HttpClient Client { get; }
         private readonly ILogger<ProductsService> _logger;
         private readonly string _allTheCloudsApiKey;
-        private const string BaseAddress = "http://alltheclouds.com.au";
+        private readonly string _baseAddress;
         private const string ListProductsUrl = "/api/products";
 
         public ProductsService(HttpClient client, IConfiguration configuration, ILogger<ProductsService> logger)
@@ -23,11 +23,12 @@ namespace AllTheClouds.Services
             Configuration = configuration;
             _logger = logger;
             _allTheCloudsApiKey = Configuration["AllTheClouds:ApiKey"];
+            _baseAddress = Configuration["AllTheClouds:BaseAddress"];
         }
 
         public async Task<IEnumerable<ProductsResponse>> ListProductsAsync()
         {
-            Client.BaseAddress = new System.Uri(BaseAddress);
+            Client.BaseAddress = new System.Uri(_baseAddress);
             Client.DefaultRequestHeaders.Add("api-key", _allTheCloudsApiKey);
             var response = await Client.GetAsync(ListProductsUrl);
 
