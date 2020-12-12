@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
 using AllTheClouds.Models;
 using Microsoft.Extensions.Configuration;
@@ -18,7 +19,8 @@ namespace AllTheClouds.Services
         private readonly string _allTheCloudsApiKey;
         private readonly string _baseAddress;
 
-        private const string ListProductsUrl = "/api/products";
+        private const string ListProductsUrl = "/api/Products";
+        private const string SubmitOrderUrl = "/api/Orders";
 
         public ProductsService(HttpClient client, IConfiguration configuration, ILogger<ProductsService> logger)
         {
@@ -34,7 +36,7 @@ namespace AllTheClouds.Services
             if (_baseAddress == null)
                 throw new NullReferenceException();
 
-            Client.BaseAddress = new System.Uri(_baseAddress);
+            Client.BaseAddress = new Uri(_baseAddress);
             Client.DefaultRequestHeaders.Add("api-key", _allTheCloudsApiKey);
             var response = await Client.GetAsync(ListProductsUrl);
 
@@ -51,6 +53,31 @@ namespace AllTheClouds.Services
             var apiResponse = await response.Content.ReadAsStringAsync();
             var products = JsonConvert.DeserializeObject<List<ProductsResponse>>(apiResponse);
             return products;
+        }
+
+        public async Task<string> SubmitOrderAsync(OrderItemsRequest orderItemsRequest)
+        {
+            if (_baseAddress == null)
+                throw new NullReferenceException();
+
+            Client.BaseAddress = new Uri(_baseAddress);
+            Client.DefaultRequestHeaders.Add("api-key", _allTheCloudsApiKey);
+
+            var request = new StringContent(JsonConvert.SerializeObject(orderItemsRequest), Encoding.UTF8,
+                "application/json");
+            var response = await Client.PostAsync(SubmitOrderUrl, request);
+
+            try
+            {
+                response.EnsureSuccessStatusCode();
+            }
+            catch (HttpRequestException httpException)
+            {
+                _logger.LogWarning(
+                    $"Failed call to {SubmitOrderUrl} with status code {response.StatusCode}", httpException);
+            }
+
+            return await response.Content.ReadAsStringAsync();
         }
     }
 }

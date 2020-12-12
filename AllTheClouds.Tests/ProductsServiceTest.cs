@@ -28,7 +28,7 @@ namespace AllTheClouds.Tests
         }
 
         [Fact]
-        public async Task Given_Empty_Base_Address_When_Retrieving_Products_Then_Throw_Null_Exception()
+        public async Task Given_Empty_Base_Address_Then_Throw_Null_Exception()
         {
             // Arrange
             var productsService = new ProductsService(
@@ -38,6 +38,7 @@ namespace AllTheClouds.Tests
 
             // Act
             await Assert.ThrowsAsync<NullReferenceException>(() => productsService.ListProductsAsync());
+            await Assert.ThrowsAsync<NullReferenceException>(() => productsService.SubmitOrderAsync(new Models.OrderItemsRequest()));
         }
 
         [Fact]
@@ -50,7 +51,7 @@ namespace AllTheClouds.Tests
 
             using var server = WireMockServer.Start(Port);
             server
-                .Given(Request.Create().WithPath("/api/products").UsingGet())
+                .Given(Request.Create().WithPath("/api/Products").UsingGet())
                 .RespondWith(Response.Create().WithStatusCode(403));
 
             var productsService = new ProductsService(
@@ -60,6 +61,36 @@ namespace AllTheClouds.Tests
 
             // Act
             await productsService.ListProductsAsync();
+
+            // Assert
+            _mockLogger.Verify(x => x.Log(
+                It.IsAny<LogLevel>(),
+                It.IsAny<EventId>(),
+                It.Is<It.IsAnyType>((o, t) => true),
+                It.IsAny<Exception>(),
+                It.Is<Func<It.IsAnyType, Exception, string>>((o, t) => true)), Times.Once);
+        }
+
+        [Fact]
+        public async Task Given_Response_Is_Forbidden_When_Submitting_Order_Then_Log_The_Exception()
+        {
+            // Arrange
+            _mockConfiguration
+                .Setup(configuration => configuration["AllTheClouds:BaseAddress"])
+                .Returns(_testBaseAddress.ToString());
+
+            using var server = WireMockServer.Start(Port);
+            server
+                .Given(Request.Create().WithPath("/api/Orders").UsingPost())
+                .RespondWith(Response.Create().WithStatusCode(403));
+
+            var productsService = new ProductsService(
+                _httpClient,
+                _mockConfiguration.Object,
+                _mockLogger.Object);
+
+            // Act
+            await productsService.SubmitOrderAsync(new Models.OrderItemsRequest());
 
             // Assert
             _mockLogger.Verify(x => x.Log(
