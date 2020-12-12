@@ -5,7 +5,7 @@
         public string ProductId;
         public string Name;
         public string Description;
-        public double UnitPrice;
+        public decimal UnitPrice;
         public int MaximumQuantity;
     }
 }
