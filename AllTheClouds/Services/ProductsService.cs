@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 using AllTheClouds.Models;
@@ -12,9 +13,11 @@ namespace AllTheClouds.Services
     {
         private IConfiguration Configuration { get; }
         private HttpClient Client { get; }
+
         private readonly ILogger<ProductsService> _logger;
         private readonly string _allTheCloudsApiKey;
         private readonly string _baseAddress;
+
         private const string ListProductsUrl = "/api/products";
 
         public ProductsService(HttpClient client, IConfiguration configuration, ILogger<ProductsService> logger)
@@ -28,6 +31,9 @@ namespace AllTheClouds.Services
 
         public async Task<IEnumerable<ProductsResponse>> ListProductsAsync()
         {
+            if (_baseAddress == null)
+                throw new NullReferenceException();
+
             Client.BaseAddress = new System.Uri(_baseAddress);
             Client.DefaultRequestHeaders.Add("api-key", _allTheCloudsApiKey);
             var response = await Client.GetAsync(ListProductsUrl);
