@@ -20,7 +20,7 @@ namespace AllTheClouds.Services
         private readonly string _baseAddress;
 
         private const string ListProductsUrl = "/api/Products";
-        private const string ListFxRatesUrl = "/api/fx-rates";
+        private const string ListForeignExchangeRatesUrl = "/api/fx-rates";
         private const string SubmitOrderUrl = "/api/Orders";
 
         public ProductsService(HttpClient client, IConfiguration configuration, ILogger<ProductsService> logger)
@@ -63,7 +63,7 @@ namespace AllTheClouds.Services
 
             Client.BaseAddress = new Uri(_baseAddress);
             Client.DefaultRequestHeaders.Add("api-key", _allTheCloudsApiKey);
-            var response = await Client.GetAsync(ListFxRatesUrl);
+            var response = await Client.GetAsync(ListForeignExchangeRatesUrl);
 
             try
             {
@@ -72,7 +72,7 @@ namespace AllTheClouds.Services
             catch (HttpRequestException httpException)
             {
                 _logger.LogWarning(
-                    $"Failed call to {ListFxRatesUrl} with status code {response.StatusCode}", httpException);
+                    $"Failed call to {ListForeignExchangeRatesUrl} with status code {response.StatusCode}", httpException);
             }
 
             var apiResponse = await response.Content.ReadAsStringAsync();
