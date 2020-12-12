@@ -38,6 +38,7 @@ namespace AllTheClouds.Tests
 
             // Act
             await Assert.ThrowsAsync<NullReferenceException>(() => productsService.ListProductsAsync());
+            await Assert.ThrowsAsync<NullReferenceException>(() => productsService.ListFxRatesAsync());
             await Assert.ThrowsAsync<NullReferenceException>(() => productsService.SubmitOrderAsync(new Models.OrderItemsRequest()));
         }
 
@@ -61,6 +62,36 @@ namespace AllTheClouds.Tests
 
             // Act
             await productsService.ListProductsAsync();
+
+            // Assert
+            _mockLogger.Verify(x => x.Log(
+                It.IsAny<LogLevel>(),
+                It.IsAny<EventId>(),
+                It.Is<It.IsAnyType>((o, t) => true),
+                It.IsAny<Exception>(),
+                It.Is<Func<It.IsAnyType, Exception, string>>((o, t) => true)), Times.Once);
+        }
+
+        [Fact]
+        public async Task Given_Response_Is_Forbidden_When_Retrieving_FxRates_Then_Log_The_Exception()
+        {
+            // Arrange
+            _mockConfiguration
+                .Setup(configuration => configuration["AllTheClouds:BaseAddress"])
+                .Returns(_testBaseAddress.ToString());
+
+            using var server = WireMockServer.Start(Port);
+            server
+                .Given(Request.Create().WithPath("/api/fx-rates").UsingGet())
+                .RespondWith(Response.Create().WithStatusCode(403));
+
+            var productsService = new ProductsService(
+                _httpClient,
+                _mockConfiguration.Object,
+                _mockLogger.Object);
+
+            // Act
+            await productsService.ListFxRatesAsync();
 
             // Assert
             _mockLogger.Verify(x => x.Log(

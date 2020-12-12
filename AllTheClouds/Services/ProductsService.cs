@@ -20,6 +20,7 @@ namespace AllTheClouds.Services
         private readonly string _baseAddress;
 
         private const string ListProductsUrl = "/api/Products";
+        private const string ListFxRatesUrl = "/api/fx-rates";
         private const string SubmitOrderUrl = "/api/Orders";
 
         public ProductsService(HttpClient client, IConfiguration configuration, ILogger<ProductsService> logger)
@@ -53,6 +54,30 @@ namespace AllTheClouds.Services
             var apiResponse = await response.Content.ReadAsStringAsync();
             var products = JsonConvert.DeserializeObject<List<ProductsResponse>>(apiResponse);
             return products;
+        }
+
+        public async Task<IEnumerable<ForeignExchangeRatesResponse>> ListFxRatesAsync()
+        {
+            if (_baseAddress == null)
+                throw new NullReferenceException();
+
+            Client.BaseAddress = new Uri(_baseAddress);
+            Client.DefaultRequestHeaders.Add("api-key", _allTheCloudsApiKey);
+            var response = await Client.GetAsync(ListFxRatesUrl);
+
+            try
+            {
+                response.EnsureSuccessStatusCode();
+            }
+            catch (HttpRequestException httpException)
+            {
+                _logger.LogWarning(
+                    $"Failed call to {ListFxRatesUrl} with status code {response.StatusCode}", httpException);
+            }
+
+            var apiResponse = await response.Content.ReadAsStringAsync();
+            var fxRates = JsonConvert.DeserializeObject<List<ForeignExchangeRatesResponse>>(apiResponse);
+            return fxRates;
         }
 
         public async Task<string> SubmitOrderAsync(OrderItemsRequest orderItemsRequest)
