@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Net.Http;
 using System.Threading.Tasks;
+using AllTheClouds.Models;
 using AllTheClouds.Services;
+using AutoFixture;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Moq;
@@ -14,13 +16,14 @@ namespace AllTheClouds.Tests
 {
     public class ProductsServiceTest
     {
-        private Uri _testBaseAddress;
+        private readonly Fixture _fixture;
         private readonly HttpClient _httpClient;
         private readonly Mock<IConfiguration> _mockConfiguration;
         private readonly Mock<ILogger<ProductsService>> _mockLogger;
 
         public ProductsServiceTest()
         {
+            _fixture = new Fixture();
             _httpClient = new HttpClient();
             _mockConfiguration = new Mock<IConfiguration>();
             _mockLogger = new Mock<ILogger<ProductsService>>();
@@ -47,10 +50,10 @@ namespace AllTheClouds.Tests
         {
             // Arrange
             using var server = WireMockServer.Start();
-            _testBaseAddress = new Uri($"http://localhost:{server.Ports[0]}");
+            var testBaseAddress = new Uri($"http://localhost:{server.Ports[0]}");
             _mockConfiguration
                 .Setup(configuration => configuration["AllTheClouds:BaseAddress"])
-                .Returns(_testBaseAddress.ToString());
+                .Returns(testBaseAddress.ToString());
 
             server
                 .Given(Request.Create().WithPath("/api/Products").UsingGet())
@@ -78,10 +81,10 @@ namespace AllTheClouds.Tests
         {
             // Arrange
             using var server = WireMockServer.Start();
-            _testBaseAddress = new Uri($"http://localhost:{server.Ports[0]}");
+            var testBaseAddress = new Uri($"http://localhost:{server.Ports[0]}");
             _mockConfiguration
                 .Setup(configuration => configuration["AllTheClouds:BaseAddress"])
-                .Returns(_testBaseAddress.ToString());
+                .Returns(testBaseAddress.ToString());
 
 
             server
@@ -110,10 +113,10 @@ namespace AllTheClouds.Tests
         {
             // Arrange
             using var server = WireMockServer.Start();
-            _testBaseAddress = new Uri($"http://localhost:{server.Ports[0]}");
+            var testBaseAddress = new Uri($"http://localhost:{server.Ports[0]}");
             _mockConfiguration
                 .Setup(configuration => configuration["AllTheClouds:BaseAddress"])
-                .Returns(_testBaseAddress.ToString());
+                .Returns(testBaseAddress.ToString());
 
             server
                 .Given(Request.Create().WithPath("/api/Orders").UsingPost())
@@ -125,7 +128,7 @@ namespace AllTheClouds.Tests
                 _mockLogger.Object);
 
             // Act
-            await productsService.SubmitOrderAsync(new Models.OrderItemsRequest());
+            await productsService.SubmitOrderAsync(_fixture.Create<OrderItemsRequest>());
 
             // Assert
             _mockLogger.Verify(x => x.Log(
