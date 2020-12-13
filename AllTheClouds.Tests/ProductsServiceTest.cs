@@ -14,15 +14,14 @@ namespace AllTheClouds.Tests
 {
     public class ProductsServiceTest
     {
-        private const int Port = 80;
-        private readonly Uri _testBaseAddress = new Uri($"http://localhost:{Port}");
+        private Uri _testBaseAddress;
         private readonly HttpClient _httpClient;
         private readonly Mock<IConfiguration> _mockConfiguration;
         private readonly Mock<ILogger<ProductsService>> _mockLogger;
 
         public ProductsServiceTest()
         {
-            _httpClient = new HttpClient {BaseAddress = _testBaseAddress};
+            _httpClient = new HttpClient();
             _mockConfiguration = new Mock<IConfiguration>();
             _mockLogger = new Mock<ILogger<ProductsService>>();
         }
@@ -39,18 +38,20 @@ namespace AllTheClouds.Tests
             // Act
             await Assert.ThrowsAsync<NullReferenceException>(() => productsService.ListProductsAsync());
             await Assert.ThrowsAsync<NullReferenceException>(() => productsService.ListFxRatesAsync());
-            await Assert.ThrowsAsync<NullReferenceException>(() => productsService.SubmitOrderAsync(new Models.OrderItemsRequest()));
+            await Assert.ThrowsAsync<NullReferenceException>(() =>
+                productsService.SubmitOrderAsync(new Models.OrderItemsRequest()));
         }
 
         [Fact]
         public async Task Given_Response_Is_Forbidden_When_Retrieving_Products_Then_Log_The_Exception()
         {
             // Arrange
+            using var server = WireMockServer.Start();
+            _testBaseAddress = new Uri($"http://localhost:{server.Ports[0]}");
             _mockConfiguration
                 .Setup(configuration => configuration["AllTheClouds:BaseAddress"])
                 .Returns(_testBaseAddress.ToString());
 
-            using var server = WireMockServer.Start(Port);
             server
                 .Given(Request.Create().WithPath("/api/Products").UsingGet())
                 .RespondWith(Response.Create().WithStatusCode(403));
@@ -76,11 +77,13 @@ namespace AllTheClouds.Tests
         public async Task Given_Response_Is_Forbidden_When_Retrieving_FxRates_Then_Log_The_Exception()
         {
             // Arrange
+            using var server = WireMockServer.Start();
+            _testBaseAddress = new Uri($"http://localhost:{server.Ports[0]}");
             _mockConfiguration
                 .Setup(configuration => configuration["AllTheClouds:BaseAddress"])
                 .Returns(_testBaseAddress.ToString());
 
-            using var server = WireMockServer.Start(Port);
+
             server
                 .Given(Request.Create().WithPath("/api/fx-rates").UsingGet())
                 .RespondWith(Response.Create().WithStatusCode(403));
@@ -106,11 +109,12 @@ namespace AllTheClouds.Tests
         public async Task Given_Response_Is_Forbidden_When_Submitting_Order_Then_Log_The_Exception()
         {
             // Arrange
+            using var server = WireMockServer.Start();
+            _testBaseAddress = new Uri($"http://localhost:{server.Ports[0]}");
             _mockConfiguration
                 .Setup(configuration => configuration["AllTheClouds:BaseAddress"])
                 .Returns(_testBaseAddress.ToString());
 
-            using var server = WireMockServer.Start(Port);
             server
                 .Given(Request.Create().WithPath("/api/Orders").UsingPost())
                 .RespondWith(Response.Create().WithStatusCode(403));
