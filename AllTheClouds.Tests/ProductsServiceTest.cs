@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Net.Http;
 using System.Threading.Tasks;
-using AllTheClouds.Models;
+using AllTheClouds.Models.DTO;
 using AllTheClouds.Services;
 using AutoFixture;
 using Microsoft.Extensions.Configuration;

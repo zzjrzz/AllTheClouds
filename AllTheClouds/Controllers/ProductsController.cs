@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using AllTheClouds.Models;
 using AllTheClouds.Models.Calculators;
+using AllTheClouds.Models.DTO;
 using AllTheClouds.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -34,6 +35,17 @@ namespace AllTheClouds.Controllers
             var calculator =
                 new PriceCalculator(new ForeignExchangeRateCalculator(foreignExchangeRates, "AUD", targetCurrency));
             return calculator.Calculate(markedUpProducts);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> Send_Order([FromBody] OrderItemsRequest orderItemsRequest)
+        {
+            var orderResponse = await _productsService.SubmitOrderAsync(orderItemsRequest);
+
+            if (!orderResponse.Equals("Order submitted"))
+                return BadRequest();
+
+            return Ok();
         }
     }
 }

@@ -1,17 +1,17 @@
 ﻿using System.Collections.Generic;
 
-namespace AllTheClouds.Models
+namespace AllTheClouds.Models.DTO
 {
     public class OrderItem
     {
-        public string ProductId;
-        public int Quantity;
+        public string ProductId { get; set; }
+        public int Quantity { get; set; }
     }
 
     public class OrderItemsRequest
     {
-        public string CustomerName;
-        public string CustomerEmail;
-        public List<OrderItem> LineItems;
+        public string CustomerName { get; set; }
+        public string CustomerEmail { get; set; }
+        public List<OrderItem> LineItems { get; set; }
     }
 }
