@@ -19,6 +19,10 @@ jobs:
         dotnet-version: 5.0.100
     - name: Install dependencies
       run: dotnet restore
+    - name: Set secrets
+      env:
+        ApiKey: ${{ secrets.ApiKey }}
+      run: dotnet user-secrets set "AllTheClouds:ApiKey" "$ApiKey"
     - name: Build
       run: dotnet build --configuration Release --no-restore
     - name: Test
