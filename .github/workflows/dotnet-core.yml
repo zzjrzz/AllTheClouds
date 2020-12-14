@@ -22,7 +22,7 @@ jobs:
     - name: Set secrets
       env:
         ApiKey: ${{ secrets.ApiKey }}
-      run: dotnet user-secrets set "AllTheClouds:ApiKey" "$ApiKey" --project $pwd/AllTheClouds
+      run: dotnet user-secrets set "AllTheClouds:ApiKey" "$ApiKey" --project /home/runner/work/AllTheClouds/AllTheClouds/AllTheClouds/AllTheClouds.csproj
     - name: Build
       run: dotnet build --configuration Release --no-restore
     - name: Test
