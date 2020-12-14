@@ -1,4 +1,4 @@
-﻿namespace AllTheClouds.Models
+﻿namespace AllTheClouds.Models.DTO
 {
     public class ForeignExchangeRateResponse
     {
