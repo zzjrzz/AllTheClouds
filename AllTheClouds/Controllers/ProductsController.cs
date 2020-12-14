@@ -19,12 +19,21 @@ namespace AllTheClouds.Controllers
         }
 
         [HttpGet]
-        public async Task<IEnumerable<ProductResponse>> Get_Products()
+        public async Task<IEnumerable<ProductResponse>> Get_Marked_Up_Products()
         {
             var products = await _productsService.ListProductsAsync();
-            var calculator = new PriceCalculator(new MarkupPriceCalculator(1.2m));
-            return calculator.Calculate(products);
+            var markupCalculator = new PriceCalculator(new MarkupPriceCalculator(1.2m));
+            return markupCalculator.Calculate(products);
         }
 
+        [HttpGet("{targetCurrency}")]
+        public async Task<IEnumerable<ProductResponse>> Get_Products_In_Currency([FromRoute] string targetCurrency)
+        {
+            var markedUpProducts = await Get_Marked_Up_Products();
+            var foreignExchangeRates = await _productsService.ListFxRatesAsync();
+            var calculator =
+                new PriceCalculator(new ForeignExchangeRateCalculator(foreignExchangeRates, "AUD", targetCurrency));
+            return calculator.Calculate(markedUpProducts);
+        }
     }
 }

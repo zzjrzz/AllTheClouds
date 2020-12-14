@@ -17,7 +17,6 @@ namespace AllTheClouds.Services
 
         private readonly ILogger<ProductsService> _logger;
         private readonly string _allTheCloudsApiKey;
-        private readonly string _baseAddress;
 
         private const string ListProductsUrl = "/api/Products";
         private const string ListForeignExchangeRatesUrl = "/api/fx-rates";
@@ -25,21 +24,17 @@ namespace AllTheClouds.Services
 
         public ProductsService(HttpClient client, IConfiguration configuration, ILogger<ProductsService> logger)
         {
-            Client = client;
             Configuration = configuration;
+            Client = client;
             _logger = logger;
+
+            Client.BaseAddress = new Uri(Configuration["AllTheClouds:BaseAddress"]);
             _allTheCloudsApiKey = Configuration["AllTheClouds:ApiKey"];
-            _baseAddress = Configuration["AllTheClouds:BaseAddress"];
         }
 
         public async Task<IEnumerable<ProductResponse>> ListProductsAsync()
         {
-            if (_baseAddress == null)
-                throw new NullReferenceException();
-
-            Client.BaseAddress = new Uri(_baseAddress);
-            Client.DefaultRequestHeaders.Add("api-key", _allTheCloudsApiKey);
-            var response = await Client.GetAsync(ListProductsUrl);
+            var response = await GetAsyncWithApiKey(ListProductsUrl);
 
             try
             {
@@ -58,12 +53,7 @@ namespace AllTheClouds.Services
 
         public async Task<IEnumerable<ForeignExchangeRateResponse>> ListFxRatesAsync()
         {
-            if (_baseAddress == null)
-                throw new NullReferenceException();
-
-            Client.BaseAddress = new Uri(_baseAddress);
-            Client.DefaultRequestHeaders.Add("api-key", _allTheCloudsApiKey);
-            var response = await Client.GetAsync(ListForeignExchangeRatesUrl);
+            var response = await GetAsyncWithApiKey(ListForeignExchangeRatesUrl);
 
             try
             {
@@ -72,7 +62,8 @@ namespace AllTheClouds.Services
             catch (HttpRequestException httpException)
             {
                 _logger.LogWarning(
-                    $"Failed call to {ListForeignExchangeRatesUrl} with status code {response.StatusCode}", httpException);
+                    $"Failed call to {ListForeignExchangeRatesUrl} with status code {response.StatusCode}",
+                    httpException);
             }
 
             var apiResponse = await response.Content.ReadAsStringAsync();
@@ -82,15 +73,9 @@ namespace AllTheClouds.Services
 
         public async Task<string> SubmitOrderAsync(OrderItemsRequest orderItemsRequest)
         {
-            if (_baseAddress == null)
-                throw new NullReferenceException();
-
-            Client.BaseAddress = new Uri(_baseAddress);
-            Client.DefaultRequestHeaders.Add("api-key", _allTheCloudsApiKey);
-
             var request = new StringContent(JsonConvert.SerializeObject(orderItemsRequest), Encoding.UTF8,
                 "application/json");
-            var response = await Client.PostAsync(SubmitOrderUrl, request);
+            var response = await PostAsyncWithApiKey(SubmitOrderUrl, request);
 
             try
             {
@@ -103,6 +88,20 @@ namespace AllTheClouds.Services
             }
 
             return await response.Content.ReadAsStringAsync();
+        }
+
+        private async Task<HttpResponseMessage> PostAsyncWithApiKey(string path, HttpContent request)
+        {
+            if (!Client.DefaultRequestHeaders.Contains("api-key"))
+                Client.DefaultRequestHeaders.Add("api-key", _allTheCloudsApiKey);
+            return await Client.PostAsync(path, request);
+        }
+
+        private async Task<HttpResponseMessage> GetAsyncWithApiKey(string path)
+        {
+            if (!Client.DefaultRequestHeaders.Contains("api-key"))
+                Client.DefaultRequestHeaders.Add("api-key", _allTheCloudsApiKey);
+            return await Client.GetAsync(path);
         }
     }
 }

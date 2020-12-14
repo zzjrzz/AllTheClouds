@@ -30,19 +30,12 @@ namespace AllTheClouds.Tests
         }
 
         [Fact]
-        public async Task Given_Empty_Base_Address_Then_Throw_Null_Exception()
+        public void Given_Empty_Base_Address_Then_Throw_Null_Exception()
         {
-            // Arrange
-            var productsService = new ProductsService(
+            Assert.Throws<ArgumentNullException>(() => new ProductsService(
                 _httpClient,
                 _mockConfiguration.Object,
-                _mockLogger.Object);
-
-            // Act
-            await Assert.ThrowsAsync<NullReferenceException>(() => productsService.ListProductsAsync());
-            await Assert.ThrowsAsync<NullReferenceException>(() => productsService.ListFxRatesAsync());
-            await Assert.ThrowsAsync<NullReferenceException>(() =>
-                productsService.SubmitOrderAsync(new Models.OrderItemsRequest()));
+                _mockLogger.Object));
         }
 
         [Fact]
