@@ -56,7 +56,7 @@ namespace AllTheClouds.Services
             return products;
         }
 
-        public async Task<IEnumerable<ForeignExchangeRatesResponse>> ListFxRatesAsync()
+        public async Task<IEnumerable<ForeignExchangeRateResponse>> ListFxRatesAsync()
         {
             if (_baseAddress == null)
                 throw new NullReferenceException();
@@ -76,7 +76,7 @@ namespace AllTheClouds.Services
             }
 
             var apiResponse = await response.Content.ReadAsStringAsync();
-            var fxRates = JsonConvert.DeserializeObject<List<ForeignExchangeRatesResponse>>(apiResponse);
+            var fxRates = JsonConvert.DeserializeObject<List<ForeignExchangeRateResponse>>(apiResponse);
             return fxRates;
         }
 

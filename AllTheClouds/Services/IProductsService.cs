@@ -7,7 +7,7 @@ namespace AllTheClouds.Services
     interface IProductsService
     {
         Task<IEnumerable<ProductResponse>> ListProductsAsync();
-        Task<IEnumerable<ForeignExchangeRatesResponse>> ListFxRatesAsync();
+        Task<IEnumerable<ForeignExchangeRateResponse>> ListFxRatesAsync();
         Task<string> SubmitOrderAsync(OrderItemsRequest orderItemsRequest);
     }
 }
