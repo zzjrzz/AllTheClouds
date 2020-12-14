@@ -11,6 +11,6 @@ namespace AllTheClouds.Models.Calculators
             _priceCalculator = priceCalculator;
         }
 
-        public IEnumerable<ProductsResponse> Calculate(IEnumerable<ProductsResponse> products) => _priceCalculator.CalculatePrices(products);
+        public IEnumerable<ProductResponse> Calculate(IEnumerable<ProductResponse> products) => _priceCalculator.CalculatePrices(products);
     }
 }

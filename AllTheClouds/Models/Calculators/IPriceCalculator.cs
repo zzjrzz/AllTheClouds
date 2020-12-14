@@ -4,6 +4,6 @@ namespace AllTheClouds.Models.Calculators
 {
     public interface IPriceCalculator
     {
-        IEnumerable<ProductsResponse> CalculatePrices(IEnumerable<ProductsResponse> products);
+        IEnumerable<ProductResponse> CalculatePrices(IEnumerable<ProductResponse> products);
     }
 }

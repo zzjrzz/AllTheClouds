@@ -12,15 +12,15 @@ namespace AllTheClouds.Models.Calculators
             _markupMultiplier = markupMultiplier;
         }
 
-        public IEnumerable<ProductsResponse> CalculatePrices(IEnumerable<ProductsResponse> products)
+        public IEnumerable<ProductResponse> CalculatePrices(IEnumerable<ProductResponse> products)
         {
-            var pricedProducts = products.ToArray();
-            foreach (var product in pricedProducts)
+            var productResponses = products.ToList();
+            foreach (var product in productResponses)
             {
                 product.UnitPrice *= _markupMultiplier;
             }
 
-            return pricedProducts;
+            return productResponses;
         }
     }
 }

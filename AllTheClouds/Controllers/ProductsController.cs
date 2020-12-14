@@ -19,11 +19,12 @@ namespace AllTheClouds.Controllers
         }
 
         [HttpGet]
-        public async Task<IEnumerable<ProductsResponse>> Get_Products()
+        public async Task<IEnumerable<ProductResponse>> Get_Products()
         {
             var products = await _productsService.ListProductsAsync();
             var calculator = new PriceCalculator(new MarkupPriceCalculator(1.2m));
             return calculator.Calculate(products);
         }
+
     }
 }

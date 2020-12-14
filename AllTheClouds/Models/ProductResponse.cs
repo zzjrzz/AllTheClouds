@@ -1,6 +1,6 @@
 ﻿namespace AllTheClouds.Models
 {
-    public class ProductsResponse
+    public class ProductResponse
     {
         public string ProductId { get; set; }
         public string Name { get; set; }

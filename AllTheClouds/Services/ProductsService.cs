@@ -32,7 +32,7 @@ namespace AllTheClouds.Services
             _baseAddress = Configuration["AllTheClouds:BaseAddress"];
         }
 
-        public async Task<IEnumerable<ProductsResponse>> ListProductsAsync()
+        public async Task<IEnumerable<ProductResponse>> ListProductsAsync()
         {
             if (_baseAddress == null)
                 throw new NullReferenceException();
@@ -52,7 +52,7 @@ namespace AllTheClouds.Services
             }
 
             var apiResponse = await response.Content.ReadAsStringAsync();
-            var products = JsonConvert.DeserializeObject<List<ProductsResponse>>(apiResponse);
+            var products = JsonConvert.DeserializeObject<List<ProductResponse>>(apiResponse);
             return products;
         }
 
