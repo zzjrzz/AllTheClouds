@@ -1,0 +1,32 @@
+
+/* Button */
+a.btn.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 16px;
+  border-radius: 2px;
+  font-size: 13px;
+  cursor: pointer;
+  background-color: #1976d2;
+  color: white;
+  border: none;
+}
+
+a.btn.btn-primary:hover {
+  opacity: 0.8;
+  font-weight: normal;
+}
+
+a.btn.btn-primary i.material-icons {
+  color: white;
+  padding-right: 6px;
+}
+
+div .row div{
+  margin-left: 10rem;
+  margin-right: 10rem;
+}
+
+div.card.col{
+  margin: 1rem;
+}

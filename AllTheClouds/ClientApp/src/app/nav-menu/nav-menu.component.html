@@ -3,7 +3,10 @@
     class="navbar navbar-expand-sm navbar-toggleable-sm bg-primary navbar-dark border-bottom box-shadow mb-3"
   >
     <div class="container">
-      <a class="navbar-brand" [routerLink]="['/']">Clouds Shack</a>
+      <a class="navbar-brand" [routerLink]="['/']">
+        <i class="material-icons">cloud</i>
+        Clouds Shack
+      </a>
       <button
         class="navbar-toggler"
         type="button"
@@ -29,7 +32,7 @@
           </li>
           <li class="nav-item" [routerLinkActive]="['link-active']">
             <a class="nav-link text-light" [routerLink]="['/fetch-data']"
-              >Fetch data</a
+            >Fetch data</a
             >
           </li>
         </ul>

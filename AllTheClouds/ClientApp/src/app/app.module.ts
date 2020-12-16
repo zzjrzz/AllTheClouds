@@ -6,7 +6,6 @@ import {RouterModule} from '@angular/router';
 
 import {AppComponent} from './app.component';
 import {NavMenuComponent} from './nav-menu/nav-menu.component';
-import {HomeComponent} from './home/home.component';
 import {FetchDataComponent} from './fetch-data/fetch-data.component';
 import {ProductListComponent} from './product-list/product-list.component';
 
@@ -14,7 +13,6 @@ import {ProductListComponent} from './product-list/product-list.component';
   declarations: [
     AppComponent,
     NavMenuComponent,
-    HomeComponent,
     FetchDataComponent,
     ProductListComponent
   ],
@@ -23,9 +21,8 @@ import {ProductListComponent} from './product-list/product-list.component';
     HttpClientModule,
     FormsModule,
     RouterModule.forRoot([
-      {path: '', component: HomeComponent, pathMatch: 'full'},
+      {path: '', component: ProductListComponent, pathMatch: 'full'},
       {path: 'fetch-data', component: FetchDataComponent},
-      {path: 'products', component: ProductListComponent},
     ])
   ],
   providers: [],
