@@ -28,3 +28,7 @@ div .row div{
 div.card.col{
   margin: 1rem;
 }
+
+input{
+  padding: 5px 10px;
+}
