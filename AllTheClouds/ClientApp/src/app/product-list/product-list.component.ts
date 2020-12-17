@@ -14,7 +14,7 @@ export class ProductListComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.productService.getProducts()
+    this.productService.getProductInCurrency('USD')
       .subscribe(
         products => (this.products = products),
         error => (console.log(error))

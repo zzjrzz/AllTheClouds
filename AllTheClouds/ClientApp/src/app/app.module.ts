@@ -6,7 +6,6 @@ import {RouterModule} from '@angular/router';
 
 import {AppComponent} from './app.component';
 import {NavMenuComponent} from './nav-menu/nav-menu.component';
-import {FetchDataComponent} from './fetch-data/fetch-data.component';
 import {ProductListComponent} from './product-list/product-list.component';
 import {CurrencyComponent} from './currency/currency.component';
 import {CartComponent} from './cart/cart.component';
@@ -15,7 +14,6 @@ import {CartComponent} from './cart/cart.component';
   declarations: [
     AppComponent,
     NavMenuComponent,
-    FetchDataComponent,
     ProductListComponent,
     CurrencyComponent,
     CartComponent
@@ -27,7 +25,6 @@ import {CartComponent} from './cart/cart.component';
     RouterModule.forRoot([
       {path: '', component: ProductListComponent, pathMatch: 'full'},
       {path: 'cart', component: CartComponent},
-      {path: 'fetch-data', component: FetchDataComponent},
     ]),
     ReactiveFormsModule
   ],

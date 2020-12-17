@@ -14,6 +14,10 @@ export class ProductService {
   getProducts() {
     return this.http.get<Product[]>(this.baseUrl + 'api/products');
   }
+
+  getProductInCurrency(currency: string) {
+    return this.http.get<Product[]>(this.baseUrl + 'api/products/' + currency);
+  }
 }
 
 export interface Product {

@@ -31,6 +31,8 @@ namespace AllTheClouds.Controllers
         public async Task<IEnumerable<ProductResponse>> Get_Products_In_Currency([FromRoute] string targetCurrency)
         {
             var markedUpProducts = await Get_Marked_Up_Products();
+            if (targetCurrency == "AUD")
+                return markedUpProducts;
             var foreignExchangeRates = await _productsService.ListFxRatesAsync();
             var calculator =
                 new PriceCalculator(new ForeignExchangeRateCalculator(foreignExchangeRates, "AUD", targetCurrency));
