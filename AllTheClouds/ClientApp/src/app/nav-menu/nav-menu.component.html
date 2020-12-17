@@ -23,17 +23,13 @@
         [ngClass]="{ show: isExpanded }"
       >
         <ul class="navbar-nav flex-grow">
+          <app-currency></app-currency>
           <li
             class="nav-item"
             [routerLinkActive]="['link-active']"
             [routerLinkActiveOptions]="{ exact: true }"
           >
-            <a class="nav-link text-light" [routerLink]="['/']">Home</a>
-          </li>
-          <li class="nav-item" [routerLinkActive]="['link-active']">
-            <a class="nav-link text-light" [routerLink]="['/fetch-data']"
-            >Fetch data</a
-            >
+            <a class="btn" [routerLink]="['/cart']"> <i class="material-icons">shopping_cart</i> Checkout</a>
           </li>
         </ul>
       </div>

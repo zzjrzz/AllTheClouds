@@ -9,6 +9,7 @@ a.navbar-brand {
 html {
   font-size: 14px;
 }
+
 @media (min-width: 768px) {
   html {
     font-size: 16px;
@@ -21,5 +22,27 @@ html {
 
 i.material-icons {
   color: white;
+  padding-right: 9px;
+}
+
+a.btn {
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 16px;
+  border-radius: 2px;
+  cursor: pointer;
+  background-color: white;
+  color: #1976d2;
+  border: none;
+  margin-left: 20px;
+}
+
+a.btn:hover {
+  opacity: 0.8;
+  font-weight: normal;
+}
+
+a.btn i.material-icons {
+  color: #1976d2;
   padding-right: 9px;
 }

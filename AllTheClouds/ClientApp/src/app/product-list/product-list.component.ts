@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
-import { productSamples } from '../productSamples';
+import {Component, OnInit} from '@angular/core';
+import {productSamples} from '../productSamples';
+import {CartService} from '../services/cart.service';
 
 @Component({
   selector: 'app-product-list',
@@ -9,9 +10,14 @@ import { productSamples } from '../productSamples';
 export class ProductListComponent implements OnInit {
   products = productSamples;
 
-  constructor() { }
+  constructor(private cartService: CartService) {
+  }
 
   ngOnInit() {
   }
 
+  addToCart(product) {
+    this.cartService.addToCart(product);
+    alert('Your cloud has been added to the cart!');
+  }
 }
