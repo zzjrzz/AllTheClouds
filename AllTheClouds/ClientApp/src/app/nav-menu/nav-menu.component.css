@@ -1,7 +1,9 @@
 a.navbar-brand {
+  display: inline-flex;
+  align-items: center;
   white-space: normal;
-  text-align: center;
-  word-break: break-all;
+  font-family: 'Permanent Marker', cursive;
+  font-size: x-large;
 }
 
 html {
@@ -19,5 +21,5 @@ html {
 
 i.material-icons {
   color: white;
-  padding-right: 6px;
+  padding-right: 9px;
 }
