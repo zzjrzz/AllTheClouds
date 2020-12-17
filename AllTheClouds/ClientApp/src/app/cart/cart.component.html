@@ -1,25 +1,28 @@
 <h3>Shopping Cart</h3>
+<p *ngIf="items.length < 1">
+  <em>There are no items in your cart yet</em>
+</p>
+<div *ngIf="items.length > 0">
+  <div class="cart-item" *ngFor="let item of items">
+    <span>{{ item.name }}</span>
+    <span>{{ item.unitPrice | currency }}</span>
+  </div>
 
-<div class="cart-item" *ngFor="let item of items">
-  <span>{{ item.name }}</span>
-  <span>{{ item.unitPrice | currency }}</span>
+  <form [formGroup]="checkoutForm" (ngSubmit)="onSubmit(checkoutForm.value)">
+    <div>
+      <label for="customerName">
+        Name
+      </label>
+      <input id="customerName" type="text" formControlName="customerName">
+    </div>
+
+    <div>
+      <label for="customerEmail">
+        Email
+      </label>
+      <input id="customerEmail" type="text" formControlName="customerEmail">
+    </div>
+
+    <button class="btn btn-primary" type="submit"><i class="material-icons">shopping_cart</i>Order</button>
+  </form>
 </div>
-
-<form [formGroup]="checkoutForm" (ngSubmit)="onSubmit(checkoutForm.value)">
-
-  <div>
-    <label for="customerName">
-      Name
-    </label>
-    <input id="customerName" type="text" formControlName="customerName">
-  </div>
-
-  <div>
-    <label for="customerEmail">
-      Email
-    </label>
-    <input id="customerEmail" type="text" formControlName="customerEmail">
-  </div>
-
-  <button class="btn btn-primary" type="submit"><i class="material-icons">shopping_cart</i>Order</button>
-</form>
