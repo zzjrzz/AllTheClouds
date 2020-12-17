@@ -27,7 +27,12 @@ label {
 
 i.material-icons {
   color: white;
-  padding-right: 9px;
+  padding-right: 3px;
+}
+
+i.material-icons.btn-danger {
+  padding: 3px;
+  cursor: pointer;
 }
 
 button.btn {
@@ -36,9 +41,12 @@ button.btn {
   padding: 8px 16px;
   border-radius: 2px;
   cursor: pointer;
-  background-color: #1976d2;
   color: white;
   border: none;
+}
+
+button.btn.btn-danger {
+  padding: 0;
 }
 
 button.btn:hover {

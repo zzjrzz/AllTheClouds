@@ -1,14 +1,15 @@
-import {Component, Input, OnInit, SimpleChanges} from '@angular/core';
+import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
 import {CartService} from '../services/cart.service';
-import {Product, ProductService} from '../services/product.service';
+import {ProductService} from '../services/product.service';
 import {CurrencyModel} from '../model/currency.model';
+import {Product} from '../model/product.model';
 
 @Component({
   selector: 'app-product-list',
   templateUrl: './product-list.component.html',
   styleUrls: ['./product-list.component.css']
 })
-export class ProductListComponent implements OnInit {
+export class ProductListComponent implements OnInit, OnChanges {
   products: Product[];
   @Input() currencyChangeEvent: CurrencyModel;
 

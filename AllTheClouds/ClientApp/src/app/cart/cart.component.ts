@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {CartService} from '../services/cart.service';
 import {FormBuilder} from '@angular/forms';
-import {Product} from '../services/product.service';
+import {Product} from '../model/product.model';
 
 @Component({
   selector: 'app-cart',
@@ -29,5 +29,9 @@ export class CartComponent implements OnInit {
   onSubmit(customerData) {
     this.items = this.cartService.clearCart();
     this.checkoutForm.reset();
+  }
+
+  removeItem(index: number) {
+    this.cartService.delete(index);
   }
 }

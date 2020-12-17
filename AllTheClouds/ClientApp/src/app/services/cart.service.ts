@@ -1,5 +1,4 @@
 import {Injectable} from '@angular/core';
-import {Order, OrderService} from './order.service';
 
 @Injectable({
   providedIn: 'root'
@@ -20,6 +19,11 @@ export class CartService {
 
   clearCart() {
     this.items = [];
+    return this.items;
+  }
+
+  delete(i: number) {
+    this.items.splice(i, 1);
     return this.items;
   }
 }

@@ -1,11 +1,11 @@
-import {Component, EventEmitter, Output, SimpleChange} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {CurrencyModel} from './model/currency.model';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html'
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   title = 'app';
 
   private selectedCurrency: CurrencyModel;

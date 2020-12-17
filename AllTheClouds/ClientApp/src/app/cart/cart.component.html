@@ -3,9 +3,12 @@
   <em>There are no items in your cart yet</em>
 </p>
 <div *ngIf="items.length > 0">
-  <div class="cart-item" *ngFor="let item of items">
+  <div class="cart-item" *ngFor="let item of items; index as i;">
     <span>{{ item.name }}</span>
     <span>{{ item.unitPrice | currency }}</span>
+    <span>
+        <i class="material-icons btn-danger" (click)="removeItem(i)">cancel</i>
+    </span>
   </div>
 
   <form [formGroup]="checkoutForm" (ngSubmit)="onSubmit(checkoutForm.value)">
