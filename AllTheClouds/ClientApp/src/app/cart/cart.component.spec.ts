@@ -2,6 +2,7 @@ import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
 import {CartComponent} from './cart.component';
 import {ReactiveFormsModule} from '@angular/forms';
+import {HttpClientModule} from '@angular/common/http';
 
 describe('CartComponent', () => {
   let component: CartComponent;
@@ -11,8 +12,12 @@ describe('CartComponent', () => {
     TestBed.configureTestingModule({
       declarations: [CartComponent],
       imports: [
-        ReactiveFormsModule
+        ReactiveFormsModule,
+        HttpClientModule
       ],
+      providers: [
+        {provide: 'BASE_URL', useValue: 'http://localhost'},
+      ]
     })
       .compileComponents();
   }));

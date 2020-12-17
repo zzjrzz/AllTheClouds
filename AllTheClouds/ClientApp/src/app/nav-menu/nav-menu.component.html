@@ -23,14 +23,7 @@
         [ngClass]="{ show: isExpanded }"
       >
         <ul class="navbar-nav flex-grow">
-          <app-currency></app-currency>
-          <li
-            class="nav-item"
-            [routerLinkActive]="['link-active']"
-            [routerLinkActiveOptions]="{ exact: true }"
-          >
-            <a class="btn" [routerLink]="['/cart']"> <i class="material-icons">shopping_cart</i> Checkout</a>
-          </li>
+          <app-currency (currencyChanged)="setCurrency($event.selectedCurrency)"></app-currency>
         </ul>
       </div>
     </div>

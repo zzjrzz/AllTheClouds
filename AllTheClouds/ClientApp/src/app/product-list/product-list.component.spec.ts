@@ -2,6 +2,7 @@ import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
 import {ProductListComponent} from './product-list.component';
 import {HttpClientModule} from '@angular/common/http';
+import {CurrencyModel} from '../model/currency.model';
 
 describe('ProductListComponent', () => {
   let component: ProductListComponent;
@@ -23,6 +24,7 @@ describe('ProductListComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(ProductListComponent);
     component = fixture.componentInstance;
+    component.currencyChangeEvent = new CurrencyModel('AUD');
     fixture.detectChanges();
   });
 

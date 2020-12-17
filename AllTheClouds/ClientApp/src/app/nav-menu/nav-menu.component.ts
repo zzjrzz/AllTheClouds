@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import {Component, EventEmitter, Output} from '@angular/core';
+import {CurrencyModel} from '../model/currency.model';
 
 @Component({
   selector: 'app-nav-menu',
@@ -7,6 +8,8 @@ import { Component } from '@angular/core';
 })
 export class NavMenuComponent {
   isExpanded = false;
+  public selectedCurrency: CurrencyModel;
+  @Output() currencyChanged = new EventEmitter<CurrencyModel>();
 
   collapse() {
     this.isExpanded = false;
@@ -14,5 +17,9 @@ export class NavMenuComponent {
 
   toggle() {
     this.isExpanded = !this.isExpanded;
+  }
+
+  setCurrency(currency: string) {
+    this.currencyChanged.emit(new CurrencyModel(currency));
   }
 }

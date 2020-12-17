@@ -1,6 +1,14 @@
 <body>
-  <app-nav-menu></app-nav-menu>
+  <app-nav-menu (currencyChanged)="setCurrencyChange($event)"></app-nav-menu>
   <div class="container">
     <router-outlet></router-outlet>
+    <div class="row">
+      <div class="col-9">
+        <app-product-list [currencyChangeEvent]="selectedCurrency"></app-product-list>
+      </div>
+      <div class="col">
+        <app-cart></app-cart>
+      </div>
+    </div>
   </div>
 </body>

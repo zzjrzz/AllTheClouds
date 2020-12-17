@@ -1,7 +1,5 @@
-<form [formGroup]="currencyForm">
-  <select class="form-control">
-    <option>AUD</option>
-    <option>USD</option>
-    <option>GBP</option>
+  <select class="form-control" (change)="currencySelected($event.target.value)">
+    <option value="AUD" selected>AUD</option>
+    <option value="USD">USD</option>
+    <option value="GBP">GBP</option>
   </select>
-</form>

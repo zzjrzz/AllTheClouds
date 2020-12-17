@@ -3,7 +3,7 @@ a.navbar-brand {
   align-items: center;
   white-space: normal;
   font-family: 'Permanent Marker', cursive;
-  font-size: x-large;
+  font-size: xxx-large;
 }
 
 html {
@@ -22,7 +22,8 @@ html {
 
 i.material-icons {
   color: white;
-  padding-right: 9px;
+  padding-right: 20px;
+  font-size: xxx-large;
 }
 
 a.btn {

@@ -1,6 +1,7 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, Input, OnInit, SimpleChanges} from '@angular/core';
 import {CartService} from '../services/cart.service';
 import {Product, ProductService} from '../services/product.service';
+import {CurrencyModel} from '../model/currency.model';
 
 @Component({
   selector: 'app-product-list',
@@ -9,12 +10,21 @@ import {Product, ProductService} from '../services/product.service';
 })
 export class ProductListComponent implements OnInit {
   products: Product[];
+  @Input() currencyChangeEvent: CurrencyModel;
 
   constructor(private cartService: CartService, private productService: ProductService) {
   }
 
+  ngOnChanges(changes: SimpleChanges) {
+    this.productService.getProductInCurrency(this.currencyChangeEvent.selectedCurrency)
+      .subscribe(
+        products => (this.products = products),
+        error => (console.log(error))
+      );
+  }
+
   ngOnInit() {
-    this.productService.getProductInCurrency('USD')
+    this.productService.getProductInCurrency(this.currencyChangeEvent.selectedCurrency)
       .subscribe(
         products => (this.products = products),
         error => (console.log(error))

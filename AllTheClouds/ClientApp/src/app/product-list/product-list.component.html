@@ -1,13 +1,13 @@
-<h2>Products</h2>
+<h3>Products</h3>
 <p *ngIf="!products"><em>Loading...</em></p>
 
 <div class="row">
-  <div class="card col" *ngFor="let product of products" style="min-width: 28rem;">
+  <div class="card col" *ngFor="let product of products" style="min-width: 20rem;">
     <div class="card-body">
       <h5 class="card-title">{{ product.name }}</h5>
       <p class="card-text">{{ product.description }}</p>
       <p *ngIf="product.unitPrice">
-        Price: {{ product.unitPrice | currency}}
+        Price: {{currencyChangeEvent.selectedCurrency}} {{ product.unitPrice | currency}}
       </p>
       <a class="btn btn-primary" (click)="addToCart(product)">
         Buy

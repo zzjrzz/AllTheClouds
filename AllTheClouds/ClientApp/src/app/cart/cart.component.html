@@ -1,4 +1,4 @@
-<h2>Shopping Cart</h2>
+<h3>Shopping Cart</h3>
 
 <div class="cart-item" *ngFor="let item of items">
   <span>{{ item.name }}</span>
@@ -8,19 +8,18 @@
 <form [formGroup]="checkoutForm" (ngSubmit)="onSubmit(checkoutForm.value)">
 
   <div>
-    <label for="name">
+    <label for="customerName">
       Name
     </label>
-    <input id="name" type="text" formControlName="name">
+    <input id="customerName" type="text" formControlName="customerName">
   </div>
 
   <div>
-    <label for="email">
+    <label for="customerEmail">
       Email
     </label>
-    <input id="email" type="text" formControlName="email">
+    <input id="customerEmail" type="text" formControlName="customerEmail">
   </div>
 
-  <button class="btn btn-primary" type="submit">Purchase</button>
-
+  <button class="btn btn-primary" type="submit"><i class="material-icons">shopping_cart</i>Order</button>
 </form>
