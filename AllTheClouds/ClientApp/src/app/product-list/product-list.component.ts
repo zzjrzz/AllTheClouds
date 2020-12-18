@@ -2,7 +2,7 @@ import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core'
 import {CartService} from '../services/cart.service';
 import {ProductService} from '../services/product.service';
 import {CurrencyModel} from '../model/currency.model';
-import {Product} from '../model/product.model';
+import {ProductModel} from '../model/product.model';
 
 @Component({
   selector: 'app-product-list',
@@ -10,7 +10,7 @@ import {Product} from '../model/product.model';
   styleUrls: ['./product-list.component.css']
 })
 export class ProductListComponent implements OnInit, OnChanges {
-  products: Product[];
+  products: ProductModel[];
   quantity: number;
   @Input() currencyChangeEvent: CurrencyModel;
 
@@ -34,9 +34,7 @@ export class ProductListComponent implements OnInit, OnChanges {
   }
 
   addToCart(product) {
-    for (let i = 0; i < this.quantity; i++) {
-      this.cartService.addToCart(product);
-    }
+     this.cartService.addToCart(product, this.quantity);
   }
 
   setQuantity(quantity: number) {

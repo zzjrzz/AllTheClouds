@@ -1,4 +1,4 @@
-export class Product {
+export class ProductModel {
   productId: string;
   name: string;
   description: string;

@@ -1,6 +1,6 @@
 import {Inject, Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
-import {Observable} from 'rxjs';
+import {Order} from '../model/order.dto';
 
 const httpOptions = {
   headers: new HttpHeaders({
@@ -16,18 +16,8 @@ export class OrderService {
   constructor(public http: HttpClient, @Inject('BASE_URL') public baseUrl: string) {
   }
 
-  sendOrder(order: Order): Observable<Order> {
-    return this.http.post<Order>('/api/Orders', order, httpOptions);
+  sendOrder(order: Order) {
+    return this.http.post<Order>('api/products', JSON.stringify(order), httpOptions);
   }
 }
 
-export interface Order {
-  customerName: string;
-  customerEmail: string;
-  lineItems: OrderItem [];
-}
-
-export interface OrderItem {
-  productId: string;
-  quantity: number;
-}

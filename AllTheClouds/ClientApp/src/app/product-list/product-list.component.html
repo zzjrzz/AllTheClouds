@@ -9,7 +9,7 @@
       <p *ngIf="product.unitPrice">
         Price: {{currencyChangeEvent.selectedCurrency}} {{ product.unitPrice | currency}}
       </p>
-      <input type="number" placeholder="Quantity" (change)="setQuantity($event.target.value)"/>
+      <input type="number" min="0" placeholder="Quantity" (change)="setQuantity($event.target.value)"/>
       <a class="btn btn-primary" (click)="addToCart(product)">
         Buy
       </a>

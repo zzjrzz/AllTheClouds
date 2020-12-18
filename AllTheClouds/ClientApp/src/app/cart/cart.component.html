@@ -1,11 +1,11 @@
 <h3>Shopping Cart</h3>
-<p *ngIf="items.length < 1">
+<p *ngIf="orderItems==undefined || orderItems.length === 0">
   <em>There are no items in your cart yet</em>
 </p>
-<div *ngIf="items.length > 0">
-  <div class="cart-item" *ngFor="let item of items; index as i;">
-    <span>{{ item.name }}</span>
-    <span>{{ item.unitPrice | currency }}</span>
+<div *ngIf="orderItems.length > 0">
+  <div class="cart-item" *ngFor="let item of orderItems; index as i;">
+    <span>{{ item.product.name }}</span>
+    <span>{{ item.quantity }}</span>
     <span>
         <i class="material-icons btn-danger" (click)="removeItem(i)">cancel</i>
     </span>

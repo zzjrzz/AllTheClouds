@@ -1,7 +1,10 @@
 import {Component, OnInit} from '@angular/core';
 import {CartService} from '../services/cart.service';
 import {FormBuilder} from '@angular/forms';
-import {Product} from '../model/product.model';
+import {CartItemModel} from '../model/cart-item.model';
+import {OrderService} from '../services/order.service';
+import {OrderItem} from '../model/order-item.dto';
+import {Order} from '../model/order.dto';
 
 @Component({
   selector: 'app-cart',
@@ -9,11 +12,12 @@ import {Product} from '../model/product.model';
   styleUrls: ['./cart.component.css']
 })
 export class CartComponent implements OnInit {
-  items: Product[];
+  orderItems: CartItemModel[];
   checkoutForm;
 
   constructor(
     private cartService: CartService,
+    private orderService: OrderService,
     private formBuilder: FormBuilder) {
 
     this.checkoutForm = this.formBuilder.group({
@@ -23,11 +27,19 @@ export class CartComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.items = this.cartService.getItems();
+    this.orderItems = this.cartService.getItems();
   }
 
   onSubmit(customerData) {
-    this.items = this.cartService.clearCart();
+    const lineItems = [];
+    for (const item of this.orderItems) {
+      lineItems.push(new OrderItem(item.product.productId, item.quantity));
+    }
+
+    const orderRequest = new Order(customerData.customerName, customerData.customerEmail, lineItems);
+    this.orderService.sendOrder(orderRequest).subscribe();
+
+    this.orderItems = this.cartService.clearCart();
     this.checkoutForm.reset();
   }
 

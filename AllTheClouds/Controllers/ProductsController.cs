@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using AllTheClouds.Models;
 using AllTheClouds.Models.Calculators;
 using AllTheClouds.Models.DTO;
 using AllTheClouds.Services;
