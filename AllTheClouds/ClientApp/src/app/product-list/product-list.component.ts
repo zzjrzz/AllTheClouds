@@ -11,7 +11,7 @@ import {ProductModel} from '../model/product.model';
 })
 export class ProductListComponent implements OnInit, OnChanges {
   products: ProductModel[];
-  quantity: number;
+  quantity = 0;
   @Input() currencyChangeEvent: CurrencyModel;
 
   constructor(private cartService: CartService, private productService: ProductService) {
@@ -34,7 +34,9 @@ export class ProductListComponent implements OnInit, OnChanges {
   }
 
   addToCart(product) {
-     this.cartService.addToCart(product, this.quantity);
+    if (this.quantity > 0) {
+      this.cartService.addToCart(product, this.quantity);
+    }
   }
 
   setQuantity(quantity: number) {
