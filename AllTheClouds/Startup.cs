@@ -42,7 +42,8 @@ namespace AllTheClouds
             });
 
             services.AddHttpClient<ProductsService>();
-            services.AddScoped<ProductsService>();
+            services.AddScoped<IProductsService, ProductsService>();
+            services.AddScoped<IOrdersService, OrdersService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Net.Http;
 using System.Threading.Tasks;
-using AllTheClouds.Models.DTO;
 using AllTheClouds.Services;
-using AutoFixture;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Moq;
@@ -16,14 +14,12 @@ namespace AllTheClouds.Tests
 {
     public class ProductsServiceTest
     {
-        private readonly Fixture _fixture;
         private readonly HttpClient _httpClient;
         private readonly Mock<IConfiguration> _mockConfiguration;
         private readonly Mock<ILogger<ProductsService>> _mockLogger;
 
         public ProductsServiceTest()
         {
-            _fixture = new Fixture();
             _httpClient = new HttpClient();
             _mockConfiguration = new Mock<IConfiguration>();
             _mockLogger = new Mock<ILogger<ProductsService>>();
@@ -91,37 +87,6 @@ namespace AllTheClouds.Tests
 
             // Act
             await productsService.ListFxRatesAsync();
-
-            // Assert
-            _mockLogger.Verify(x => x.Log(
-                It.IsAny<LogLevel>(),
-                It.IsAny<EventId>(),
-                It.Is<It.IsAnyType>((o, t) => true),
-                It.IsAny<Exception>(),
-                It.Is<Func<It.IsAnyType, Exception, string>>((o, t) => true)), Times.Once);
-        }
-
-        [Fact]
-        public async Task Given_Response_Is_Forbidden_When_Submitting_Order_Then_Log_The_Exception()
-        {
-            // Arrange
-            using var server = WireMockServer.Start();
-            var testBaseAddress = new Uri($"http://localhost:{server.Ports[0]}");
-            _mockConfiguration
-                .Setup(configuration => configuration["AllTheClouds:BaseAddress"])
-                .Returns(testBaseAddress.ToString());
-
-            server
-                .Given(Request.Create().WithPath("/api/Orders").UsingPost())
-                .RespondWith(Response.Create().WithStatusCode(403));
-
-            var productsService = new ProductsService(
-                _httpClient,
-                _mockConfiguration.Object,
-                _mockLogger.Object);
-
-            // Act
-            await productsService.SubmitOrderAsync(_fixture.Create<OrderItemsRequest>());
 
             // Assert
             _mockLogger.Verify(x => x.Log(

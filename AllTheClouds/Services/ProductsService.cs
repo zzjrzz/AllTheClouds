@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 using AllTheClouds.Models.DTO;
 using Microsoft.Extensions.Configuration;
@@ -20,21 +19,19 @@ namespace AllTheClouds.Services
 
         private const string ListProductsUrl = "/api/Products";
         private const string ListForeignExchangeRatesUrl = "/api/fx-rates";
-        private const string SubmitOrderUrl = "/api/Orders";
 
         public ProductsService(HttpClient client, IConfiguration configuration, ILogger<ProductsService> logger)
         {
             Configuration = configuration;
             Client = client;
-            _logger = logger;
-
-            Client.BaseAddress = new Uri(Configuration["AllTheClouds:BaseAddress"]);
             _allTheCloudsApiKey = Configuration["AllTheClouds:ApiKey"];
+            _logger = logger;
+            ConfigureHttpClient();
         }
 
         public async Task<IEnumerable<ProductResponse>> ListProductsAsync()
         {
-            var response = await GetAsyncWithApiKey(ListProductsUrl);
+            var response = await Client.GetAsync(ListProductsUrl);
 
             try
             {
@@ -53,7 +50,7 @@ namespace AllTheClouds.Services
 
         public async Task<IEnumerable<ForeignExchangeRateResponse>> ListFxRatesAsync()
         {
-            var response = await GetAsyncWithApiKey(ListForeignExchangeRatesUrl);
+            var response = await Client.GetAsync(ListForeignExchangeRatesUrl);
 
             try
             {
@@ -71,41 +68,12 @@ namespace AllTheClouds.Services
             return fxRates;
         }
 
-        public async Task<string> SubmitOrderAsync(OrderItemsRequest orderItemsRequest)
+        private void ConfigureHttpClient()
         {
-            var request = new StringContent(JsonConvert.SerializeObject(orderItemsRequest), Encoding.UTF8,
-                "application/json");
-            var response = await PostAsyncWithApiKey(SubmitOrderUrl, request);
+            Client.BaseAddress = new Uri(Configuration["AllTheClouds:BaseAddress"]);
 
-            try
-            {
-                response.EnsureSuccessStatusCode();
-            }
-            catch (HttpRequestException httpException)
-            {
-                _logger.LogWarning(
-                    $"Failed call to {SubmitOrderUrl} with status code {response.StatusCode}", httpException);
-            }
-
-            return await response.Content.ReadAsStringAsync();
-        }
-
-        private void AttachApiKey()
-        {
             if (!Client.DefaultRequestHeaders.Contains("api-key"))
                 Client.DefaultRequestHeaders.Add("api-key", _allTheCloudsApiKey);
-        }
-
-        private async Task<HttpResponseMessage> PostAsyncWithApiKey(string path, HttpContent request)
-        {
-            AttachApiKey();
-            return await Client.PostAsync(path, request);
-        }
-
-        private async Task<HttpResponseMessage> GetAsyncWithApiKey(string path)
-        {
-            AttachApiKey();
-            return await Client.GetAsync(path);
         }
     }
 }

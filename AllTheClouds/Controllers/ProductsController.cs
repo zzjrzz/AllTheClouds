@@ -11,9 +11,9 @@ namespace AllTheClouds.Controllers
     [ApiController]
     public class ProductsController : ControllerBase
     {
-        private readonly ProductsService _productsService;
+        private readonly IProductsService _productsService;
 
-        public ProductsController(ProductsService productsService)
+        public ProductsController(IProductsService productsService)
         {
             _productsService = productsService;
         }
@@ -36,17 +36,6 @@ namespace AllTheClouds.Controllers
             var calculator =
                 new PriceCalculator(new ForeignExchangeRateCalculator(foreignExchangeRates, "AUD", targetCurrency));
             return calculator.Calculate(markedUpProducts);
-        }
-
-        [HttpPost]
-        public async Task<ActionResult> Send_Order([FromBody] OrderItemsRequest orderItemsRequest)
-        {
-            var orderResponse = await _productsService.SubmitOrderAsync(orderItemsRequest);
-
-            if (!orderResponse.Equals("Order submitted"))
-                return BadRequest();
-
-            return Ok();
         }
     }
 }

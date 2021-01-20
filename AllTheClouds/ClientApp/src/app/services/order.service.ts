@@ -17,7 +17,7 @@ export class OrderService {
   }
 
   sendOrder(order: Order) {
-    return this.http.post<Order>('api/products', JSON.stringify(order), httpOptions);
+    return this.http.post<Order>('api/orders', JSON.stringify(order), httpOptions);
   }
 }
 
