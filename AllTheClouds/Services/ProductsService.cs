@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
-using AllTheClouds.Models;
 using AllTheClouds.Models.DTO;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -91,17 +90,21 @@ namespace AllTheClouds.Services
             return await response.Content.ReadAsStringAsync();
         }
 
-        private async Task<HttpResponseMessage> PostAsyncWithApiKey(string path, HttpContent request)
+        private void AttachApiKey()
         {
             if (!Client.DefaultRequestHeaders.Contains("api-key"))
                 Client.DefaultRequestHeaders.Add("api-key", _allTheCloudsApiKey);
+        }
+
+        private async Task<HttpResponseMessage> PostAsyncWithApiKey(string path, HttpContent request)
+        {
+            AttachApiKey();
             return await Client.PostAsync(path, request);
         }
 
         private async Task<HttpResponseMessage> GetAsyncWithApiKey(string path)
         {
-            if (!Client.DefaultRequestHeaders.Contains("api-key"))
-                Client.DefaultRequestHeaders.Add("api-key", _allTheCloudsApiKey);
+            AttachApiKey();
             return await Client.GetAsync(path);
         }
     }
