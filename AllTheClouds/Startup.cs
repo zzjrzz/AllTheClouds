@@ -1,3 +1,5 @@
+using System;
+using System.Net.Http;
 using AllTheClouds.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -31,19 +33,29 @@ namespace AllTheClouds
 
         public IConfiguration Configuration { get; }
 
+        private static void ConfigureHttpClient(IServiceProvider s, HttpClient c)
+        {
+            var host = s.GetRequiredService<IConfiguration>().GetSection("AllTheClouds:BaseAddress").Value;
+            if (host != null)
+                c.BaseAddress = new Uri(host);
+
+            var apiKey = s.GetRequiredService<IConfiguration>().GetSection("AllTheClouds:ApiKey").Value;
+            if (apiKey != null && !c.DefaultRequestHeaders.Contains("api-key"))
+                c.DefaultRequestHeaders.Add("api-key", apiKey);
+        }
+
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
             // In production, the Angular files will be served from this directory
-            services.AddSpaStaticFiles(configuration =>
-            {
-                configuration.RootPath = "ClientApp/dist";
-            });
-
-            services.AddHttpClient<ProductsService>();
+            services.AddSpaStaticFiles(configuration => { configuration.RootPath = "ClientApp/dist"; });
             services.AddScoped<IProductsService, ProductsService>();
             services.AddScoped<IOrdersService, OrdersService>();
+            services.AddScoped<ICurrencyService, CurrencyService>();
+            services.AddHttpClient<IProductsService, ProductsService>(ConfigureHttpClient);
+            services.AddHttpClient<IOrdersService, OrdersService>(ConfigureHttpClient);
+            services.AddHttpClient<ICurrencyService, CurrencyService>(ConfigureHttpClient);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -69,10 +81,7 @@ namespace AllTheClouds
 
             app.UseRouting();
 
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });
+            app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
 
             app.UseSpa(spa =>
             {

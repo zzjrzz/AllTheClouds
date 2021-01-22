@@ -12,10 +12,12 @@ namespace AllTheClouds.Controllers
     public class ProductsController : ControllerBase
     {
         private readonly IProductsService _productsService;
+        private readonly ICurrencyService _currencyService;
 
-        public ProductsController(IProductsService productsService)
+        public ProductsController(IProductsService productsService, ICurrencyService currencyService)
         {
             _productsService = productsService;
+            _currencyService = currencyService;
         }
 
         [HttpGet]
@@ -32,7 +34,7 @@ namespace AllTheClouds.Controllers
             var markedUpProducts = await Get_Marked_Up_Products();
             if (targetCurrency == "AUD")
                 return markedUpProducts;
-            var foreignExchangeRates = await _productsService.ListFxRatesAsync();
+            var foreignExchangeRates = await _currencyService.ListFxRatesAsync();
             var calculator =
                 new PriceCalculator(new ForeignExchangeRateCalculator(foreignExchangeRates, "AUD", targetCurrency));
             return calculator.Calculate(markedUpProducts);

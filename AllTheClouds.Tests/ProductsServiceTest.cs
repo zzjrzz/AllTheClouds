@@ -2,7 +2,6 @@
 using System.Net.Http;
 using System.Threading.Tasks;
 using AllTheClouds.Services;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Moq;
 using WireMock.RequestBuilders;
@@ -15,23 +14,12 @@ namespace AllTheClouds.Tests
     public class ProductsServiceTest
     {
         private readonly HttpClient _httpClient;
-        private readonly Mock<IConfiguration> _mockConfiguration;
         private readonly Mock<ILogger<ProductsService>> _mockLogger;
 
         public ProductsServiceTest()
         {
             _httpClient = new HttpClient();
-            _mockConfiguration = new Mock<IConfiguration>();
             _mockLogger = new Mock<ILogger<ProductsService>>();
-        }
-
-        [Fact]
-        public void Given_Empty_Base_Address_Then_Throw_Null_Exception()
-        {
-            Assert.Throws<ArgumentNullException>(() => new ProductsService(
-                _httpClient,
-                _mockConfiguration.Object,
-                _mockLogger.Object));
         }
 
         [Fact]
@@ -39,10 +27,7 @@ namespace AllTheClouds.Tests
         {
             // Arrange
             using var server = WireMockServer.Start();
-            var testBaseAddress = new Uri($"http://localhost:{server.Ports[0]}");
-            _mockConfiguration
-                .Setup(configuration => configuration["AllTheClouds:BaseAddress"])
-                .Returns(testBaseAddress.ToString());
+            _httpClient.BaseAddress = new Uri($"http://localhost:{server.Ports[0]}");
 
             server
                 .Given(Request.Create().WithPath("/api/Products").UsingGet())
@@ -50,7 +35,6 @@ namespace AllTheClouds.Tests
 
             var productsService = new ProductsService(
                 _httpClient,
-                _mockConfiguration.Object,
                 _mockLogger.Object);
 
             // Act
@@ -70,11 +54,7 @@ namespace AllTheClouds.Tests
         {
             // Arrange
             using var server = WireMockServer.Start();
-            var testBaseAddress = new Uri($"http://localhost:{server.Ports[0]}");
-            _mockConfiguration
-                .Setup(configuration => configuration["AllTheClouds:BaseAddress"])
-                .Returns(testBaseAddress.ToString());
-
+            _httpClient.BaseAddress = new Uri($"http://localhost:{server.Ports[0]}");
 
             server
                 .Given(Request.Create().WithPath("/api/fx-rates").UsingGet())
@@ -82,7 +62,6 @@ namespace AllTheClouds.Tests
 
             var productsService = new ProductsService(
                 _httpClient,
-                _mockConfiguration.Object,
                 _mockLogger.Object);
 
             // Act
