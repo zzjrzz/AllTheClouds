@@ -11,7 +11,7 @@ using WireMock.ResponseBuilders;
 using WireMock.Server;
 using Xunit;
 
-namespace AllTheClouds.Tests
+namespace AllTheClouds.Tests.Unit.Service
 {
     public class OrdersServiceTest
     {

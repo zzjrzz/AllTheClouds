@@ -5,7 +5,7 @@ using AllTheClouds.Models.Calculators;
 using AllTheClouds.Models.DTO;
 using Xunit;
 
-namespace AllTheClouds.Tests
+namespace AllTheClouds.Tests.Unit
 {
     public class ForeignExchangeRateCalculatorTest
     {

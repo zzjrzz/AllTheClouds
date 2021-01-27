@@ -15,7 +15,6 @@ namespace AllTheClouds.Services
         private readonly ILogger<ProductsService> _logger;
 
         private const string ListProductsUrl = "/api/Products";
-        private const string ListForeignExchangeRatesUrl = "/api/fx-rates";
 
         public ProductsService(HttpClient client, ILogger<ProductsService> logger)
         {

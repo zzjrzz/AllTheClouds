@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using AllTheClouds.Models;
 using AllTheClouds.Models.DTO;
 using AllTheClouds.Services;
 using AllTheClouds.Services.Interfaces;
@@ -21,20 +22,16 @@ namespace AllTheClouds.Controllers
         }
 
         [HttpGet]
-        public async Task<IEnumerable<ProductResponse>> GetMarkedUpProducts()
+        public async Task<IEnumerable<ProductResponse>> GetProducts(
+            [FromQuery] decimal markupMultiplier,
+            [FromQuery] Currency sourceCurrency = Currency.AUD,
+            [FromQuery] Currency targetCurrency = Currency.AUD)
         {
             var products = await _productsService.ListProductsAsync();
-            return products.MarkUpPrices(1.2m);
-        }
-
-        [HttpGet("{sourceCurrency}/{targetCurrency}")]
-        public async Task<IEnumerable<ProductResponse>> GetProductsInCurrency([FromRoute] string sourceCurrency,
-            string targetCurrency)
-        {
-            var markedUpProducts = await GetMarkedUpProducts();
-            return markedUpProducts.ConvertCurrency(await _currencyService.ListFxRatesAsync(),
-                sourceCurrency,
-                targetCurrency);
+            var currencyRates = await _currencyService.ListFxRatesAsync();
+            return products
+                .MarkUpPrices(markupMultiplier)
+                .ConvertCurrency(currencyRates, sourceCurrency, targetCurrency);
         }
     }
 }
