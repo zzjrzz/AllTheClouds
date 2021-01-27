@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using AllTheClouds.Models.DTO;
 using AllTheClouds.Services;
+using AllTheClouds.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AllTheClouds.Controllers
@@ -17,7 +18,7 @@ namespace AllTheClouds.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> Send_Order([FromBody] OrderItemsRequest orderItemsRequest)
+        public async Task<ActionResult> SendOrder([FromBody] OrderItemsRequest orderItemsRequest)
         {
             var orderResponse = await _ordersService.SubmitOrderAsync(orderItemsRequest);
 

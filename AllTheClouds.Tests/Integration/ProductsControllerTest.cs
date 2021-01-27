@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc.Testing;
 using Xunit;
 
-namespace AllTheClouds.Tests
+namespace AllTheClouds.Tests.Integration
 {
     public class ProductsControllerTest :
         IClassFixture<WebApplicationFactory<Startup>>

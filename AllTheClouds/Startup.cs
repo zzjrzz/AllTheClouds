@@ -1,6 +1,7 @@
 using System;
 using System.Net.Http;
 using AllTheClouds.Services;
+using AllTheClouds.Services.Interfaces;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;

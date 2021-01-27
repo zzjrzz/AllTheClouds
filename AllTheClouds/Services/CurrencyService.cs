@@ -2,6 +2,7 @@
 using System.Net.Http;
 using System.Threading.Tasks;
 using AllTheClouds.Models.DTO;
+using AllTheClouds.Services.Interfaces;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 

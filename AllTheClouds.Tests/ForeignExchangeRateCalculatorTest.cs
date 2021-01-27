@@ -18,7 +18,7 @@ namespace AllTheClouds.Tests
                 new ForeignExchangeRateResponse {Rate = 2m, SourceCurrency = "AUD", TargetCurrency = "USD"}
             };
             var products = new List<ProductResponse> { new ProductResponse { UnitPrice = 1 }, new ProductResponse { UnitPrice = 2 } };
-            var priceCalculator = new PriceCalculator(new ForeignExchangeRateCalculator(fxRates, "AUD", "USD"));
+            var priceCalculator = new PriceCalculator(new ForeignExchangeRateCalculator(fxRates, Currency.AUD, Currency.USD));
             var fxRatedProducts = priceCalculator.Calculate(products).ToArray();
 
             Assert.Equal( 2m, fxRatedProducts[0].UnitPrice);

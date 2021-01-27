@@ -11,34 +11,34 @@ using Xunit;
 
 namespace AllTheClouds.Tests
 {
-    public class ProductsServiceTest
+    public class CurrencyServiceTest
     {
         private readonly HttpClient _httpClient;
-        private readonly Mock<ILogger<ProductsService>> _mockLogger;
+        private readonly Mock<ILogger<CurrencyService>> _mockLogger;
 
-        public ProductsServiceTest()
+        public CurrencyServiceTest()
         {
             _httpClient = new HttpClient();
-            _mockLogger = new Mock<ILogger<ProductsService>>();
+            _mockLogger = new Mock<ILogger<CurrencyService>>();
         }
 
         [Fact]
-        public async Task Given_Response_Is_Forbidden_When_Retrieving_Products_Then_Log_The_Exception()
+        public async Task Given_Response_Is_Forbidden_When_Retrieving_FxRates_Then_Log_The_Exception()
         {
             // Arrange
             using var server = WireMockServer.Start();
             _httpClient.BaseAddress = new Uri($"http://localhost:{server.Ports[0]}");
 
             server
-                .Given(Request.Create().WithPath("/api/Products").UsingGet())
+                .Given(Request.Create().WithPath("/api/fx-rates").UsingGet())
                 .RespondWith(Response.Create().WithStatusCode(403));
 
-            var productsService = new ProductsService(
+            var currencyService = new CurrencyService(
                 _httpClient,
                 _mockLogger.Object);
 
             // Act
-            await productsService.ListProductsAsync();
+            await currencyService.ListFxRatesAsync();
 
             // Assert
             _mockLogger.Verify(x => x.Log(
@@ -48,6 +48,5 @@ namespace AllTheClouds.Tests
                 It.IsAny<Exception>(),
                 It.Is<Func<It.IsAnyType, Exception, string>>((o, t) => true)), Times.Once);
         }
-
     }
 }

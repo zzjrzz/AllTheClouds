@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using AllTheClouds.Models.DTO;
 
-namespace AllTheClouds.Services
+namespace AllTheClouds.Services.Interfaces
 {
     public interface IOrdersService
     {

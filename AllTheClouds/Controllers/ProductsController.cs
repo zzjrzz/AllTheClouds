@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using AllTheClouds.Models.Calculators;
 using AllTheClouds.Models.DTO;
 using AllTheClouds.Services;
+using AllTheClouds.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AllTheClouds.Controllers
@@ -21,23 +21,20 @@ namespace AllTheClouds.Controllers
         }
 
         [HttpGet]
-        public async Task<IEnumerable<ProductResponse>> Get_Marked_Up_Products()
+        public async Task<IEnumerable<ProductResponse>> GetMarkedUpProducts()
         {
             var products = await _productsService.ListProductsAsync();
-            var markupCalculator = new PriceCalculator(new MarkupPriceCalculator(1.2m));
-            return markupCalculator.Calculate(products);
+            return products.MarkUpPrices(1.2m);
         }
 
-        [HttpGet("{targetCurrency}")]
-        public async Task<IEnumerable<ProductResponse>> Get_Products_In_Currency([FromRoute] string targetCurrency)
+        [HttpGet("{sourceCurrency}/{targetCurrency}")]
+        public async Task<IEnumerable<ProductResponse>> GetProductsInCurrency([FromRoute] string sourceCurrency,
+            string targetCurrency)
         {
-            var markedUpProducts = await Get_Marked_Up_Products();
-            if (targetCurrency == "AUD")
-                return markedUpProducts;
-            var foreignExchangeRates = await _currencyService.ListFxRatesAsync();
-            var calculator =
-                new PriceCalculator(new ForeignExchangeRateCalculator(foreignExchangeRates, "AUD", targetCurrency));
-            return calculator.Calculate(markedUpProducts);
+            var markedUpProducts = await GetMarkedUpProducts();
+            return markedUpProducts.ConvertCurrency(await _currencyService.ListFxRatesAsync(),
+                sourceCurrency,
+                targetCurrency);
         }
     }
 }

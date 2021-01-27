@@ -13,6 +13,6 @@ export class ProductService {
   }
 
   getProductInCurrency(currency: string) {
-    return this.http.get<ProductModel[]>(this.baseUrl + 'api/products/' + currency);
+    return this.http.get<ProductModel[]>(this.baseUrl + 'api/products/' + 'AUD/' + currency);
   }
 }

@@ -2,6 +2,7 @@
 using System.Net.Http;
 using System.Threading.Tasks;
 using AllTheClouds.Models.DTO;
+using AllTheClouds.Services.Interfaces;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 
@@ -39,26 +40,6 @@ namespace AllTheClouds.Services
             var apiResponse = await response.Content.ReadAsStringAsync();
             var products = JsonConvert.DeserializeObject<List<ProductResponse>>(apiResponse);
             return products;
-        }
-
-        public async Task<IEnumerable<ForeignExchangeRateResponse>> ListFxRatesAsync()
-        {
-            var response = await Client.GetAsync(ListForeignExchangeRatesUrl);
-
-            try
-            {
-                response.EnsureSuccessStatusCode();
-            }
-            catch (HttpRequestException httpException)
-            {
-                _logger.LogWarning(
-                    $"Failed call to {ListForeignExchangeRatesUrl} with status code {response.StatusCode}",
-                    httpException);
-            }
-
-            var apiResponse = await response.Content.ReadAsStringAsync();
-            var fxRates = JsonConvert.DeserializeObject<List<ForeignExchangeRateResponse>>(apiResponse);
-            return fxRates;
         }
     }
 }
